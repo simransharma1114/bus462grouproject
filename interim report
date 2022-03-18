@@ -13,10 +13,9 @@ library(stargazer)
 library(PerformanceAnalytics)
 library(dplyr)
 
-#Step 1: Import Data -- up on canvas or online
-# data ref:https://data.world/nrippner/titanic-disaster-dataset 
-path <- "https://raw.githubusercontent.com/guru99-edu/R-Programming/master/titanic_data.csv"
-titanic <- fread(path) 
+#Import Data
+data <- "credit data.csv"
+credit_data <- fread(data) 
 
 #Q2.a) What is the data you are looking at? Where did you get it from? Is it analyzable / what did you do to make it analyzable?
 
