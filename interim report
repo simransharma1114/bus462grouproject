@@ -1,1 +1,36 @@
+#BUS 462 Group Project - Interim Report
 
+#### PREAMBLE : ## Clearing mem buffers ####
+cat("\014")  # Clear Console
+rm(list = ls(all.names = TRUE))# clear all
+gc()
+set.seed(42) # Set a seed to ensure repeatable random samples
+
+# libraries
+require(data.table)
+require(pastecs)
+library(stargazer)
+library(PerformanceAnalytics)
+library(dplyr)
+
+#Step 1: Import Data -- up on canvas or online
+# data ref:https://data.world/nrippner/titanic-disaster-dataset 
+path <- "https://raw.githubusercontent.com/guru99-edu/R-Programming/master/titanic_data.csv"
+titanic <- fread(path) 
+
+#Q2.a) What is the data you are looking at? Where did you get it from? Is it analyzable / what did you do to make it analyzable?
+
+
+#Q2.b)What variables are in your data – a summary description (like the table describing the chimera dataset in the assignments). 
+#If you have a large data set, only include those variables that are relevant
+
+
+#Q2.c) Preliminary Analysis – show me the summary statistics of the relevant variables, a correlation table, 
+#any plots or figures that you think show some insight into the data? (don’t need to include everything, just what you consider relevant)
+
+
+#Q2.d) What are your hypotheses/modeling approach, or what analyses are you going to conduct - what is the DV, what is the IV? 
+#Are there any controls or interactions? Are you using LOGIT or OLS or LASSO or CART?
+
+
+#Q2.e) anything else?
