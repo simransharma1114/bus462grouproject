@@ -1,4 +1,7 @@
 #BUS 462 Group Project - Interim Report
+#March 21, 2022
+
+#Academic integrity pledge: We pledge on our honour that we have neither received nor given unauthorized assistance on this deliverable.
 
 #### PREAMBLE : ## Clearing mem buffers ####
 cat("\014")  # Clear Console
@@ -13,9 +16,36 @@ library(stargazer)
 library(PerformanceAnalytics)
 library(dplyr)
 
-#Import Data
-data <- "credit data.csv"
-credit_data <- fread(data) 
+#Import data
+data <- fread("/Users/aliciachow/Documents/4th Year/BUS 462/Datasets/credit_data.csv")
+
+#Q2.a) View data
+head(data)
+tail(data)
+View(data)
+
+#Check structure of data variables
+str(data)
+
+#Check for and remove NAs (missing data)
+colSums(is.na(data))
+data <- na.omit(data)
+
+#Change data type of variables to factor
+data$checking_status <- factor(data$checking_status)
+data$credit_history <- factor(data$credit_history)
+data$purpose <- factor(data$purpose)
+data$savings_status <- factor(data$savings_status)
+data$employment <- factor(data$employment)
+data$personal_status <- factor(data$personal_status)
+data$other_parties <- factor(data$other_parties)
+data$property_magnitude <- factor(data$property_magnitude)
+data$other_payment_plans <- factor(data$other_payment_plans)
+data$housing <- factor(data$housing)
+data$job <- factor(data$job)
+data$own_telephone <- factor(data$own_telephone)
+data$foreign_worker <- factor(data$foreign_worker)
+data$class <- factor(data$class) 
 
 #Q2.a) What is the data you are looking at? Where did you get it from? Is it analyzable / what did you do to make it analyzable?
 
