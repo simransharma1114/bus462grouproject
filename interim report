@@ -47,19 +47,94 @@ data$own_telephone <- factor(data$own_telephone)
 data$foreign_worker <- factor(data$foreign_worker)
 data$class <- factor(data$class) 
 
-#Q2.a) What is the data you are looking at? Where did you get it from? Is it analyzable / what did you do to make it analyzable?
-
-
 #Q2.b)What variables are in your data – a summary description (like the table describing the chimera dataset in the assignments). 
 #If you have a large data set, only include those variables that are relevant
-
 
 #Q2.c) Preliminary Analysis – show me the summary statistics of the relevant variables, a correlation table, 
 #any plots or figures that you think show some insight into the data? (don’t need to include everything, just what you consider relevant)
 
+#Preliminary Analysis
+
+cat("\014")  # Clear Console
+rm(list = ls(all.names = TRUE))# clear all data objects
+gc() # clear memory
+set.seed(42) # Set a seed to ensure repeatable random samples
+
+dt1 <- read.csv("~/Erin Adela/SFU/SPRING 2022/BUS 462/Group Project/Credit Card Fraud.csv", header = TRUE)
+require(data.table)
+library(stargazer)
+library(ggplot2)
+library(PerformanceAnalytics)
+
+str(dt1)
+
+#To convert some variables into integers.
+unique(dt1$checking_status)
+dt1$checking_status <- as.integer(factor(dt1$checking_status, levels = c("'<0'","'0<=X<200'","'>=200'","'no checking'")))
+dt1
+
+unique(dt1$credit_history)
+dt1$credit_history <- as.integer(factor(dt1$credit_history, levels = c("'critical/other existing credit'", "'existing paid'",  "'delayed previously'", "'no credits/all paid'" ,"'all paid'" )))
+dt1
+
+unique(dt1$purpose)
+dt1$purpose <- as.integer(factor(dt1$purpose, levels = c("radio/tv","education","furniture/equipment","'new car'","'used car'","business","'domestic appliance'","repairs","other","retraining")))
+dt1
+
+unique(dt1$savings_status) 
+dt1$savings_status<- as.integer(factor(dt1$savings_status, levels = c("'no known savings'", "'<100'","'500<=X<1000'","'>=1000'","'100<=X<500'")))
+dt1
+
+unique(dt1$employment)
+dt1$employment <- as.integer(factor(dt1$employment, levels = c("unemployed","'<1'","'1<=X<4'","'4<=X<7'","'>=7'")))
+dt1
+
+unique(dt1$personal_status)
+dt1$personal_status <- as.integer(factor(dt1$personal_status, levels = c("'male single'","'female div/dep/mar'","'male div/sep'","'male mar/wid'")))
+dt1
+
+unique(dt1$other_parties)
+dt1$other_parties <- as.integer(factor(dt1$other_parties, levels = c("none","guarantor","'co applicant'")))
+dt1
+
+unique(dt1$property_magnitude)
+dt1$property_magnitude <- as.integer(factor(dt1$property_magnitude, levels = c("'real estate'","'life insurance'","'no known property'","car")))
+dt1
+
+unique(dt1$other_payment_plans) 
+dt1$other_payment_plans<- as.integer(factor(dt1$other_payment_plans, levels = c("none", "bank","stores")))
+dt1
+
+unique(dt1$housing) 
+dt1$housing<- as.integer(factor(dt1$housing, levels = c("own", "'for free'","rent")))
+dt1
+
+unique(dt1$job) 
+dt1$job<- as.integer(factor(dt1$job, levels = c("skilled", "'unskilled resident'","'high qualif/self emp/mgmt'","'unemp/unskilled non res'")))
+dt1
+
+unique(dt1$foreign_worker) 
+dt1$foreign_worker<- as.integer(factor(dt1$foreign_worker, levels = c("yes","no")))
+dt1
+
+unique(dt1$own_telephone) 
+dt1$own_telephone<- as.integer(factor(dt1$own_telephone, levels = c("yes","none")))
+dt1
+
+unique(dt1$class) 
+dt1$class<- as.integer(factor(dt1$class, levels = c("good","bad")))
+dt1
+
+#To get the correlation chart of all variables.
+chart.Correlation(dt1, histogram=TRUE, pch=19)
+
+#To get the plot of duration vs. credit amount.
+plot(dt1$credit_amount,main="Duration vs. Credit Amount",xlab="Duration",ylab="Credit amount")
+
+#To get the boxplot of credit amount, so that we can see the distribution and the outliers.
+boxplot(dt1$credit_amount,main="Credit Amount Boxplot",xlab="Credit amount")
 
 #Q2.d) What are your hypotheses/modeling approach, or what analyses are you going to conduct - what is the DV, what is the IV? 
 #Are there any controls or interactions? Are you using LOGIT or OLS or LASSO or CART?
-
 
 #Q2.e) anything else?
