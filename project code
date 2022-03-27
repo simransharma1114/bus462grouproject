@@ -1,1 +1,10 @@
+data <- fread("https://github.com/simransharma1114/bus462grouproject/blob/7481b6b242b9cd385dbc5d6702fb55b6a49823f8/credit%20data.csv")
 
+#Q1 - What variables should be focused on while evaluating credit amount?
+
+
+#Q2 - How does the scale of purchases affect one’s credit amount? That is, are individuals more likely to pay off their credit or less likely when purchasing larger items (which may take longer to pay off)?
+
+
+
+#Q3 - Given the loan/customer features, we want to predict the default on loans.
