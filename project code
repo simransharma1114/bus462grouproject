@@ -1,4 +1,20 @@
-data <- fread("https://github.com/simransharma1114/bus462grouproject/blob/7481b6b242b9cd385dbc5d6702fb55b6a49823f8/credit%20data.csv")
+#BUS 462 Group Project - Codebase
+#Team E.Kappa
+#April 5, 2022
+
+#Clearing mem buffers
+cat("\014")  #Clear Console
+rm(list = ls(all.names = TRUE))# clear all
+gc()
+set.seed(42) #Set a seed to ensure repeatable random samples
+
+#Libraries
+require(data.table)
+require(pastecs)
+require(stargazer)
+require(PerformanceAnalytics)
+
+data <- fread("/Users/aliciachow/Documents/4th Year/BUS 462/Datasets/credit_data.csv")
 colSums(is.na(data))
 data <- na.omit(data)
 
@@ -17,12 +33,8 @@ data$own_telephone<- as.integer(factor(data$own_telephone, levels = c("yes","non
 #Dependent Variable: Credit Amount
 #Independent Variables: Purpose, Credit History, Duration, Property Magnitude, Housing, Telephone (assuming it is similar to a mobile device and will be quite expensive)
 
-require(data.table)
-library(PerformanceAnalytics)
-library(stargazer)
-
-dataq2<-subset(data,select=c(purpose, credit_history,duration,property_magnitude,housing,own_telephone,credit_amount))
-dataframeq2<-data.frame(dataq2)
+dataq2 <- subset(data,select=c(purpose, credit_history,duration,property_magnitude,housing,own_telephone,credit_amount))
+dataframeq2 <- data.frame(dataq2)
 dataframeq2
 
 #To get the correlation chart of all variables.
@@ -48,3 +60,15 @@ AIC(OLSModel)
 
 
 #Q3 - Given the loan/customer features, we want to predict the default on loans.
+head(data)
+tail(data)
+
+dataq3 <- data[,c("purpose","other_parties","installment_commitment","property_magnitude", "existing_credits", "num_dependents", "personal_status", "employment", "residence_since", "age", "housing", "job", "own_telephone", "foreign_worker", "other_payment_plans")]
+dataframeq3 <- data.frame(dataq3)
+
+#Stats summary
+stat.desc(dataq3)
+stargazer(dataq3,type="text")
+
+#Correlation
+chart.Correlation(
