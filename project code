@@ -32,7 +32,7 @@ data$own_telephone<- as.integer(factor(data$own_telephone, levels = c("yes","non
 chart.Correlation(data, histogram=TRUE, pch=19)
 
 # OLS model 
-m.OLS<-lm(credit_amount ~ ., data=dt1)
+m.OLS<-lm(credit_amount ~ ., data=data)
 
 # Looking at the summary results from the OLS regression model
 summary(m.OLS)
