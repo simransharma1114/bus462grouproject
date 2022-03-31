@@ -28,6 +28,18 @@ data$own_telephone<- as.integer(factor(data$own_telephone, levels = c("yes","non
 
 #Q1 - What variables should be focused on while evaluating credit amount?
 
+#To get the correlation chart of all variables.
+chart.Correlation(data, histogram=TRUE, pch=19)
+
+# OLS model 
+m.OLS<-lm(credit_amount ~ ., data=dt1)
+
+# Looking at the summary results from the OLS regression model
+summary(m.OLS)
+AIC(m.OLS)
+stargazer(m.OLS,type="text")
+
+
 
 #Q2 - How does the scale of purchases affect one’s credit amount? That is, are individuals more likely to pay off their credit or less likely when purchasing larger items (which may take longer to pay off)?
 #Dependent Variable: Credit Amount
