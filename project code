@@ -39,7 +39,13 @@ summary(m.OLS)
 AIC(m.OLS)
 stargazer(m.OLS,type="text")
 
+#Stepwise Regression
+model.step.OLS <- step(m.OLS) 
 
+# Looking at the summary results from the Stepwise regression 
+stargazer(m.OLS,model.step.OLS,type="text")
+summary(model.step.OLS)
+AIC(model.step.OLS)
 
 #Q2 - How does the scale of purchases affect one’s credit amount? That is, are individuals more likely to pay off their credit or less likely when purchasing larger items (which may take longer to pay off)?
 #Dependent Variable: Credit Amount
