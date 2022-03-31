@@ -70,5 +70,22 @@ dataframeq3 <- data.frame(dataq3)
 stat.desc(dataq3)
 stargazer(dataq3,type="text")
 
+#Convert data types - need to add levels
+dataq3$purpose <- as.integer(factor(dataq3$purpose, levels = c()))
+dataq3$employment <- as.integer(factor(dataq3$employment, levels = c()))
+dataq3$personal_status <- as.integer(factor(dataq3$personal_status, levels = c()))
+dataq3$other_parties <- as.integer(factor(dataq3$other_parties))
+dataq3$property_magnitude <- as.integer(factor(dataq3$property_magnitude))
+dataq3$other_payment_plans <- as.integer(factor(dataq3$other_payment_plans))
+dataq3$housing <- as.integer(factor(dataq3$housing))
+dataq3$job <- as.integer(factor(dataq3$job))
+dataq3$own_telephone <- as.integer(factor(dataq3$own_telephone))
+dataq3$foreign_worker <- as.integer(factor(dataq3$foreign_worker))
+dataq3$installment_commitment <- as.integer(factor(dataq3$installment_commitment))
+dataq3$existing_credits <- as.integer(factor(dataq3$existing_credits))
+dataq3$num_dependents <- as.integer(factor(dataq3$num_dependents))
+dataq3$residence_since <- as.integer(factor(dataq3$residence_since))
+dataq3$age <- as.integer(factor(dataq3$age))
+
 #Correlation
-chart.Correlation(
+chart.Correlation(dataframeq3) #Need to finish converting variables
