@@ -52,11 +52,9 @@ AIC(model.step.OLS)
 #Independent Variables: Purpose, Credit History, Duration, Property Magnitude, Housing, Telephone (assuming it is similar to a mobile device and will be quite expensive)
 
 dataq2 <- subset(data,select=c(purpose, credit_history,duration,property_magnitude,housing,own_telephone,credit_amount))
-dataframeq2 <- data.frame(dataq2)
-dataframeq2
 
 #To get the correlation chart of all variables.
-chart.Correlation(dataframeq2, histogram=TRUE, pch=19)
+chart.Correlation(dataq2, histogram=TRUE, pch=19)
 
 #run the OLS model
 OLSModel <- lm(dataframeq2$credit_amount ~ dataframeq2$purpose + dataframeq2$credit_history + dataframeq2$duration + dataframeq2$property_magnitude + dataframeq2$housing + dataframeq2$own_telephone, data=dataframeq2)
