@@ -79,7 +79,7 @@ AIC(OLSModel)
 # Visualize the relationship between the amount of credit an individual has/duration and the various purchasing habits (purpose)
 plot(dataq2$credit_amount, dataq2$purpose, xlab = "Credit Amount", ylab = "Purpose of Credit")
 plot(dataq2$duration, dataq2$purpose, xlab = "duration", ylab = "Purpose")
-plot(dataq2$credit_amount, dataq2$duration, xlab = "Credit Amount", ylab = "Duration")
+plot(dataq2$duration, dataq2$credit_amount, xlab = "Duration", ylab = "Credit Amount")
 
 
 # Based on the first OLS Model, duration is the most significant variable when analyzing one's credit amount
