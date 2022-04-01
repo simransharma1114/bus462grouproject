@@ -65,6 +65,9 @@ summary(OLSModel)
 stargazer(OLSModel,type="text")
 AIC(OLSModel)
 
+# Visualize the relationship between the various purchasing habits (purpose) and the amount of credit an individual has
+plot(dataq2$purpose, dataq2$credit_amount, xlab = "Purpose of Credit", ylab = "Credit Amount")
+hist(dataq2$purpose, dataq2$credit_amount, xlab = "Purpose of Credit", ylab = "Credit Amount")
 
 #OLS Model 2 (considers interaction between credit history and duration)
 historyduration <- (dataq2$credit_history*dataq2$duration)
