@@ -57,6 +57,13 @@ stat.desc(dataq2)
 #To get the correlation chart of all variables.
 chart.Correlation(dataq2, histogram=TRUE, pch=19)
 
+# We can also visualize the correlations utilizing a correlogram
+install.packages("corrplot")
+library(corrplot)
+
+cor_data<-cor(dataq2)
+corrplot(cor_data, method="number", "upper")
+
 #run the OLS model
 OLSModel <- lm(credit_amount ~ purpose + credit_history + duration + property_magnitude + housing + own_telephone, data=dataq2)
 
