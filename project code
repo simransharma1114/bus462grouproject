@@ -2,6 +2,9 @@
 #Team E.Kappa
 #April 5, 2022
 
+
+#Academic integrity pledge: We pledge on our honor that we have neither received nor given unauthorized assistance on this deliverable.
+
 #Clearing mem buffers
 cat("\014")  #Clear Console
 rm(list = ls(all.names = TRUE))# clear all
@@ -13,6 +16,7 @@ require(data.table)
 require(pastecs)
 require(stargazer)
 require(PerformanceAnalytics)
+require(corrplot)
 
 data <- fread("/Users/aliciachow/Documents/4th Year/BUS 462/Datasets/credit_data.csv")
 colSums(is.na(data))
@@ -61,7 +65,6 @@ stat.desc(dataq2)
 chart.Correlation(dataq2, histogram=TRUE, pch=19)
 
 # We can also visualize the correlations utilizing a correlogram
-library(corrplot)
 cor_data<-cor(dataq2)
 corrplot(cor_data, method="number", "upper")
 
