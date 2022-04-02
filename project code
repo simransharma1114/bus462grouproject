@@ -92,7 +92,7 @@ plot(dataq2$duration, dataq2$credit_amount, main="Duration vs. Credit Amount", x
 # Based on the first OLS Model, duration is the most significant variable when analyzing one's credit amount
 # For our question, we want to analyze how purchases impact an individual's credit amount, and whether duration plays a factor in this 
 # We should find the interactions between duration and purpose, and duration and owning a phone. 
-# While housing has a high co-efficient and has a low correlation with duration and credit amount, our independent variable
+
 
 # Create a variable that considers the interaction between purpose and duration
 purpose_duration <- (dataq2$purpose*dataq2$duration)
@@ -109,6 +109,22 @@ stargazer(OLSModel2, type="text")
 AIC(OLSModel2)
 
 stargazer(OLSModel1, OLSModel2, type="text")
+
+
+# While housing has a high co-efficient and has a low correlation with duration and credit amount, our independent variable
+cor(dataq2$credit_history,dataq2$duration)
+cor(dataq2$credit_amount,dataq2$housing)
+
+# Hypothetically, if we ran an OLS regression using housing
+housing_duration<-(dataq2$housing*dataq2$duration)
+OLSModel3 <- lm(credit_amount ~ property_magnitude + housing_duration + purpose + own_telephone + credit_history, data=dataq2)
+OLSModel3
+summary(OLSModel3)
+stargazer(OLSModel3, type="text")
+
+# The adjusted r-squared value is ~0.3 which is fairly low compared to the other models. 
+stargazer(OLSModel1, OLSModel2, OLSModel3, type="text")
+
 
 #Q3 - Given the loan/customer features, we want to predict the default on loans.
 head(data)
