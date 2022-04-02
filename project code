@@ -105,9 +105,6 @@ AIC(OLSModel2)
 head(data)
 tail(data)
 
-dataq3 <- data[,c("purpose","other_parties","installment_commitment","property_magnitude", "existing_credits", "num_dependents", "personal_status", "employment", "residence_since", "age", "housing", "job", "own_telephone", "foreign_worker", "other_payment_plans")]
-dataframeq3 <- data.frame(dataq3)
-
 #Stats summary
 stat.desc(dataq3)
 stargazer(dataq3,type="text")
@@ -121,6 +118,27 @@ data$job <- as.integer(factor(data$job, levels = c("skilled","‘unskilled resid
 data$foreign_worker <- as.integer(factor(data$foreign_worker, levels = c("yes","no")))
 data$employment <- as.integer(factor(data$employment, levels = c("'<1'","'>=7'","'1<=X<4'","unemployed")))
 
+#Subset data
+dataq3 <- data[,c("purpose","other_parties","installment_commitment","property_magnitude", "existing_credits", "num_dependents", "personal_status", "employment", "residence_since", "age", "housing", "job", "own_telephone", "foreign_worker", "other_payment_plans")]
+dataframeq3 <- data.frame(dataq3)
+
 #Correlation
 chart.Correlation(dataq3)
-warnings()
+
+#Shuffle data
+shuffle_index <- sample(1:nrow(dataq3))
+dataq3 <- dataq3[shuffle_index,]
+
+#Create test and train data
+#Top 80% for train and bottom 20% for test
+n_cut <- round(nrow(dataq3)*.8,0) # row at which to cut data
+dataq3_train <- dataq3[1:n_cut] # create training data subset
+dataq3_test <- dataq3[(n_cut+1):nrow(dataq3)] # create test data subset
+
+#Check dim
+dim(dataq3_train)
+dim(dataq3_test)
+
+#Test distribution
+#prop.table(table(dataq3_train$))
+#prop.table(table(data_testq3$))
