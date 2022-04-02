@@ -24,11 +24,20 @@ data <- na.omit(data)
 
 #Change data type of variables to integers
 
+data$checking_status <- as.integer(factor(data$checking_status, levels = c("'<0'","'0<=X<200'","'>=200'","'no checking'")))
 data$credit_history <- as.integer(factor(data$credit_history, levels = c("'critical/other existing credit'", "'existing paid'",  "'delayed previously'", "'no credits/all paid'" ,"'all paid'" )))
 data$purpose <- as.integer(factor(data$purpose, levels = c("radio/tv","education","furniture/equipment","'new car'","'used car'","business","'domestic appliance'","repairs","other","retraining")))
+data$savings_status<- as.integer(factor(data$savings_status, levels = c("'no known savings'", "'<100'","'500<=X<1000'","'>=1000'","'100<=X<500'")))
+data$employment <- as.integer(factor(data$employment, levels = c("unemployed","'<1'","'1<=X<4'","'4<=X<7'","'>=7'")))
+data$personal_status <- as.integer(factor(data$personal_status, levels = c("'male single'","'female div/dep/mar'","'male div/sep'","'male mar/wid'")))
+data$other_parties <- as.integer(factor(data$other_parties, levels = c("none","guarantor","'co applicant'")))
 data$property_magnitude <- as.integer(factor(data$property_magnitude, levels = c("'real estate'","'life insurance'","'no known property'","car")))
+data$other_payment_plans<- as.integer(factor(data$other_payment_plans, levels = c("none", "bank","stores")))
 data$housing<- as.integer(factor(data$housing, levels = c("own", "'for free'","rent")))
+data$job<- as.integer(factor(data$job, levels = c("skilled", "'unskilled resident'","'high qualif/self emp/mgmt'","'unemp/unskilled non res'")))
 data$own_telephone<- as.integer(factor(data$own_telephone, levels = c("none","yes")))
+data$foreign_worker<- as.integer(factor(data$foreign_worker, levels = c("yes","no")))
+data$class<- as.integer(factor(data$class, levels = c("good","bad")))
 
 #Q1 - What variables should be focused on while evaluating credit amount?
 
