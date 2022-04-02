@@ -151,3 +151,41 @@ dim(dataq3_test)
 #Test distribution
 #prop.table(table(dataq3_train$))
 #prop.table(table(data_testq3$))
+
+##Classifying data
+data$BAD = ifelse(df$class=='bad', 1, 0)
+
+data[, c('class', 'BAD')]
+
+sapply(data, class)
+
+categorical_vars = c('checking_status', 'credit_history', 'purpose', 'savings_status', 'employment', 'personal_status', 'residence_since', 'property_magnitude', 'housing', 'job', 'foreign_worker')
+
+df = dummy_cols(data, select_columns = categorical_vars)
+
+df= select(df,-class, -own_telephone, -other_parties, -other_payment_plans,-checking_status, -purpose, -savings_status, -employment, -personal_status, -residence_since, -property_magnitude, -housing, -job, foreign_worker)
+
+length(colnames(df))
+
+sum(df$BAD == 1)
+sum(df$BAD == 0)
+
+install.packages('caret')
+library(caret)
+
+train_idx = createDataPartition(df$BAD, p = 0.85, list = FALSE)
+
+
+df_train = df[train_idx,]
+df_test = df[-train_idx,]
+
+##Running logit
+logit <- glm(BAD ~.-1, data = df_train, family = binomial(link = 'logit'))
+logit
+
+glm_probs = predict(logit, newdata = df_test, type = 'response', se.fit = TRUE)
+
+predictions = ifelse(glm_probs$fit >= 0.5, 1, 0)
+
+accuracy = sum(df_test$BAD == predictions)/length(predictions)
+
