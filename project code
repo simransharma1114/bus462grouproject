@@ -114,10 +114,6 @@ AIC(OLSModel2)
 head(data)
 tail(data)
 
-#Stats summary
-stat.desc(dataq3)
-stargazer(dataq3,type="text")
-
 #Convert remaining data types
 data$personal_status <- as.integer(factor(data$personal_status, levels = c("'female div/dep/mar'","'male div/sep'","'male mar/wid'","	
 'male single'")))
@@ -130,6 +126,10 @@ data$employment <- as.integer(factor(data$employment, levels = c("'<1'","'>=7'",
 #Subset data
 dataq3 <- data[,c("purpose","other_parties","installment_commitment","property_magnitude", "existing_credits", "num_dependents", "personal_status", "employment", "residence_since", "age", "housing", "job", "own_telephone", "foreign_worker", "other_payment_plans")]
 dataframeq3 <- data.frame(dataq3)
+
+#Stats summary
+stat.desc(dataq3)
+stargazer(dataq3,type="text")
 
 #Correlation
 chart.Correlation(dataq3)
