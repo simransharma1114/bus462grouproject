@@ -91,6 +91,8 @@ plot(dataq2$duration, dataq2$credit_amount, main="Duration vs. Credit Amount", x
 
 # Based on the first OLS Model, duration is the most significant variable when analyzing one's credit amount
 # For our question, we want to analyze how purchases impact an individual's credit amount, and whether duration plays a factor in this 
+# We should find the interactions between duration and purpose, and duration and owning a phone. 
+# While housing has a high co-efficient and has a low correlation with duration and credit amount, our independent variable
 
 # Create a variable that considers the interaction between purpose and duration
 purpose_duration <- (dataq2$purpose*dataq2$duration)
