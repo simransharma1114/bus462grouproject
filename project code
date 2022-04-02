@@ -28,7 +28,7 @@ data$credit_history <- as.integer(factor(data$credit_history, levels = c("'criti
 data$purpose <- as.integer(factor(data$purpose, levels = c("radio/tv","education","furniture/equipment","'new car'","'used car'","business","'domestic appliance'","repairs","other","retraining")))
 data$property_magnitude <- as.integer(factor(data$property_magnitude, levels = c("'real estate'","'life insurance'","'no known property'","car")))
 data$housing<- as.integer(factor(data$housing, levels = c("own", "'for free'","rent")))
-data$own_telephone<- as.integer(factor(data$own_telephone, levels = c("yes","none")))
+data$own_telephone<- as.integer(factor(data$own_telephone, levels = c("none","yes")))
 
 #Q1 - What variables should be focused on while evaluating credit amount?
 
