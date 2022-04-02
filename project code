@@ -23,7 +23,6 @@ colSums(is.na(data))
 data <- na.omit(data)
 
 #Change data type of variables to integers
-
 data$checking_status <- as.integer(factor(data$checking_status, levels = c("'<0'","'0<=X<200'","'>=200'","'no checking'")))
 data$credit_history <- as.integer(factor(data$credit_history, levels = c("'critical/other existing credit'", "'existing paid'",  "'delayed previously'", "'no credits/all paid'" ,"'all paid'" )))
 data$purpose <- as.integer(factor(data$purpose, levels = c("'domestic appliance'","radio/tv","furniture/equipment","repairs","'used car'","'new car'","education","business","retraining","other"))) #assuming the order goes from the cheapest purchase to the most expensive purchase.
@@ -78,22 +77,20 @@ cor_data<-cor(dataq2)
 corrplot(cor_data, method="number", "upper")
 
 # To analyze the data and answer our question, run the OLS model with all independent variables mentioned above
-OLSModel <- lm(credit_amount ~ purpose + credit_history + duration + property_magnitude + housing + own_telephone, data=dataq2)
+OLSModel1 <- lm(credit_amount ~ purpose + credit_history + duration + property_magnitude + housing + own_telephone, data=dataq2)
 
 # Let's look at the summary results from the OLS regression model
-summary(OLSModel)
-stargazer(OLSModel,type="text")
-AIC(OLSModel)
+summary(OLSModel1)
+stargazer(OLSModel1,type="text")
+AIC(OLSModel1)
 
 # Visualize the relationship between the amount of credit an individual has/duration and the various purchasing habits (purpose)
-plot(dataq2$credit_amount, dataq2$purpose, xlab = "Credit Amount", ylab = "Purpose of Credit")
-plot(dataq2$duration, dataq2$purpose, xlab = "duration", ylab = "Purpose")
-plot(dataq2$duration, dataq2$credit_amount, xlab = "Duration", ylab = "Credit Amount")
-
+plot(dataq2$purpose, dataq2$credit_amount, main="Purpose vs. Credit Amount", xlab = "Purpose", ylab = "Credit Amount")
+plot(dataq2$purpose, dataq2$duration, main="Purpose vs. Duration", xlab = "Purpose", ylab = "Duration")
+plot(dataq2$duration, dataq2$credit_amount, main="Duration vs. Credit Amount", xlab = "Duration", ylab = "Credit Amount")
 
 # Based on the first OLS Model, duration is the most significant variable when analyzing one's credit amount
 # For our question, we want to analyze how purchases impact an individual's credit amount, and whether duration plays a factor in this 
-
 
 # Create a variable that considers the interaction between purpose and duration
 purpose_duration <- (dataq2$purpose*dataq2$duration)
@@ -106,9 +103,10 @@ OLSModel2 <- lm(credit_amount ~ property_magnitude + housing + purpose_duration 
 OLSModel2
 
 summary(OLSModel2)
-stargazer(OLSModel2,type="text")
+stargazer(OLSModel2, type="text")
 AIC(OLSModel2)
 
+stargazer(OLSModel1, OLSModel2, type="text")
 
 #Q3 - Given the loan/customer features, we want to predict the default on loans.
 head(data)
