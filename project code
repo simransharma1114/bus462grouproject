@@ -159,6 +159,28 @@ dim(dataq3_test)
 #prop.table(table(dataq3_train$))
 #prop.table(table(data_testq3$))
 
+# libraries
+require(data.table)
+require(pastecs)
+require(stargazer)
+credit
+
+colnames(credit)
+
+##See the data
+head(credit)
+tail(credit)
+view(credit)
+
+##Check the structure of the data - are all columns properly coded (numeric, categorical,...)
+str(credit)
+
+##Checking for missing values
+colSums(is.na(credit)) # check if any columns have missing data
+data <- na.omit(credit) #omits rows with NAs
+
+data
+
 require(data.table)
 install.packages('dplyr')
 install.packages('fastDummies')
@@ -168,8 +190,12 @@ library(fastDummies)
 library(dplyr)
 library(ggplot2)
 
+##Assigning bad credit and good credit
 data$BAD = ifelse(data$class=='bad', 1, 0)
 
+data$BAD
+
+##Converting to factors
 data$purpose = factor(data$purpose)
 data$checking_status = factor(data$checking_status)
 data$credit_history = factor(data$credit_history)
@@ -233,8 +259,7 @@ ggplot(data, mapping = aes(x = age,  y= credit_amount, color = class)) + geom_po
 
 data$age_amount = data$age * data$credit_amount
 
-
-
+data$age_amount
 
 # experiment 1
 AUC1 = c()
