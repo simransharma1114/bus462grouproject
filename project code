@@ -168,40 +168,173 @@ dim(dataq3_test)
 #prop.table(table(dataq3_train$))
 #prop.table(table(data_testq3$))
 
-##Classifying data
-data$BAD = ifelse(df$class=='bad', 1, 0)
-
-data[, c('class', 'BAD')]
-
-sapply(data, class)
-
-categorical_vars = c('checking_status', 'credit_history', 'purpose', 'savings_status', 'employment', 'personal_status', 'residence_since', 'property_magnitude', 'housing', 'job', 'foreign_worker')
-
-df = dummy_cols(data, select_columns = categorical_vars)
-
-df= select(df,-class, -own_telephone, -other_parties, -other_payment_plans,-checking_status, -purpose, -savings_status, -employment, -personal_status, -residence_since, -property_magnitude, -housing, -job, foreign_worker)
-
-length(colnames(df))
-
-sum(df$BAD == 1)
-sum(df$BAD == 0)
-
+require(data.table)
+install.packages('dplyr')
+install.packages('fastDummies')
 install.packages('caret')
 library(caret)
+library(fastDummies)
+library(dplyr)
+library(ggplot2)
 
-train_idx = createDataPartition(df$BAD, p = 0.85, list = FALSE)
+data$BAD = ifelse(data$class=='bad', 1, 0)
+
+data$purpose = factor(data$purpose)
+data$checking_status = factor(data$checking_status)
+data$credit_history = factor(data$credit_history)
+data$savings_status = factor(data$savings_status)
+data$employment = factor(data$employment)
+data$property_magnitude = factor(data$property_magnitude)
+data$housing = factor(data$housing)
+data$job  = factor(data$job)
+data$foreign_worker = factor(data$foreign_worker)
+
+## checking_status
+ggplot(data = data, mapping = aes(x = checking_status, fill = class)) + geom_bar(position = 'stack')
+
+##we see that some factors above have a higher number of defaults (Even proportionally)
+
+#credit_history
+ggplot(data = data, mapping = aes(x = credit_history, fill = class)) + geom_bar(position = 'stack')
+
+#purpose
+ggplot(data = data, mapping = aes(x = purpose, fill = class)) + geom_bar(position = 'fill') + labs(y = 'proportion') 
+
+## education, new car and others have higher default rates
 
 
-df_train = df[train_idx,]
-df_test = df[-train_idx,]
+#own telephone
 
-##Running logit
-logit <- glm(BAD ~.-1, data = df_train, family = binomial(link = 'logit'))
-logit
+ggplot(data = data, mapping = aes(x = own_telephone, fill = class)) + geom_bar(position = 'fill') + labs(y = 'proportion') 
+## does not explain much
 
-glm_probs = predict(logit, newdata = df_test, type = 'response', se.fit = TRUE)
+ggplot(data = data, mapping = aes(x = employment, fill = class)) + geom_bar(position = 'dodge')  
 
-predictions = ifelse(glm_probs$fit >= 0.5, 1, 0)
+## employment does not have a lot fo explanatory power, except that it tells us that newly hired persons have a higher default rate
 
-accuracy = sum(df_test$BAD == predictions)/length(predictions)
+# foreign worker
+ggplot(data = data, mapping = aes(x = foreign_worker, fill = class)) + geom_bar(position = 'fill') + labs(y = 'proportion')
 
+## foreign workers default more
+
+ggplot(data = data, mapping = aes(x = credit_amount, fill = class)) + geom_density(alpha = 0.4)
+## shows that smaller loans are easily paid and that there are more defaulters with high credit amounts
+
+ggplot(data = data, mapping = aes(x = class, y = age)) + geom_boxplot()
+# the distributions are not that different, however younger people tend to have a higher mean default rate
+
+ggplot(data = data, mapping = aes(x = num_dependents, fill = class)) + geom_bar(position = 'fill') + labs(y = 'proportion')
+
+# number of dependents does not explain anything
+
+# time to check some interactions
+
+# credit_amount and duration
+
+ggplot(data, mapping = aes(x = duration,  y= credit_amount, color = class)) + geom_point() + geom_smooth(method = 'gam', se = FALSE)
+
+## not too different
+
+# credit amount and age
+ggplot(data, mapping = aes(x = age,  y= credit_amount, color = class)) + geom_point() + geom_smooth(method = 'gam', se = FALSE)
+
+## different distributions, therefore we should create an interaction variable
+
+data$age_amount = data$age * data$credit_amount
+
+
+
+
+# experiment 1
+AUC1 = c()
+accuracy1 = c()
+for (k in 1:5) {
+  train_idx = createDataPartition(data$class, p = 0.85, list = FALSE)
+  df_train = data[train_idx,]
+  df_test = data[-train_idx,]
+  model <- glm(BAD ~ checking_status + duration + credit_history + credit_amount + purpose + credit_amount +
+                 installment_commitment + property_magnitude +
+                 age + employment +  housing + job + foreign_worker + age_amount, data = df_train,
+               family = binomial(link = 'logit'))
+  glm_probs = predict(model, newdata = df_test, type = 'response', se.fit = TRUE)
+  
+  predictions = ifelse(glm_probs$fit > 0.5, 1, 0)
+  
+  accuracy1 = c(accuracy1, sum(df_test$BAD == predictions)/length(predictions))
+  
+  ## AUC is a ranking measure 
+  AUC1 = c(AUC1,ModelMetrics::auc(actual = df_test$BAD, predicted = as.numeric(glm_probs$fit)))
+  
+}
+nrow(df_test)
+predictions
+
+
+mean(accuracy1)
+mean(AUC1)
+
+#prob(BAD) = y = f(age + a.....)
+ # the function in experiment one is estimated via logistic regression
+# the function in experiment three is estimated via CART
+
+
+
+# experiment 2: checking how AUC and accuracy change with the size of training set
+
+set.seed(123)
+AUC2 = c()
+accuracy2 = c()
+for (p in c(0.6, 0.65, 0.7, 0.75,0.77, 0.8, 0.83, 0.85, 0.9, 0.91, 0.93, 0.95)) {
+  train_idx = createDataPartition(data$class, p = p, list = FALSE)
+  df_train = data[train_idx,]
+  df_test = data[-train_idx,]
+  logit <- glm(BAD ~ checking_status + duration + credit_history + credit_amount + purpose + credit_amount +
+                 installment_commitment + property_magnitude +
+                 age + employment +  housing + job + foreign_worker + age_amount, data = df_train,
+               family = binomial(link = 'logit'))
+  glm_probs = predict(logit, newdata = df_test, type = 'response', se.fit = TRUE)
+  
+  predictions = ifelse(glm_probs$fit > 0.6, 1, 0)
+  
+  accuracy2 = c(accuracy2, sum(df_test$BAD == predictions)/length(predictions))
+  
+  ## AUC is a ranking measure 
+  AUC2 = c(AUC2,ModelMetrics::auc(actual = df_test$BAD, predicted = as.numeric(glm_probs$fit)))
+  
+}
+
+
+p_auc_acc = data.frame('p' = c(0.6, 0.65, 0.7, 0.75, 0.77, 0.8, 0.83, 0.85, 0.9, 0.91, 0.93, 0.95), 'auc' = AUC2, 'accuracy' = accuracy2)
+ggplot(data = p_auc_acc, mapping = aes(x=p, y = auc)) + geom_smooth()
+ggplot(data = p_auc_acc, mapping = aes(x=p, y = accuracy)) + geom_smooth()
+
+
+# experiment 3: can CART do better?
+
+
+set.seed(123)
+auc3 = c()
+for (p in c(0.6, 0.65, 0.7, 0.75,0.77, 0.8, 0.83, 0.85, 0.9, 0.91, 0.93, 0.95)) {
+  train_idx = createDataPartition(data$class, p =p, list = FALSE)
+  df_train = data[train_idx,]
+  df_test = data[-train_idx,]
+  cart <- rpart::rpart(BAD ~ checking_status + duration + credit_history + credit_amount + purpose + credit_amount +
+                         installment_commitment + property_magnitude +
+                         age + employment +  housing + job + foreign_worker + age_amount, data = df_train, method = 'class', minbucket = 10)
+  
+  
+  predictions_CART = predict(cart, newdata = df_test, type = 'prob')
+  
+  auc3 = c(auc3, ModelMetrics::auc(actual = df_test$BAD, predicted = predictions_CART[,2]))
+  
+  }  
+
+p_auc_acc$auc_cart = auc3
+
+ggplot() + geom_smooth(data = p_auc_acc, mapping = aes(x=p, y = auc, col = 'auc_logit')) + geom_smooth(data = p_auc_acc, mapping = aes(x=p, y = auc_cart, col = 'auc_CART'))
+
+
+
+
+## divide data set into train and test
+## trained (both) models on train and tested them on test set (in terms of auc)
