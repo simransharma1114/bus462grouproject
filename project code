@@ -130,15 +130,6 @@ stargazer(OLSModel1, OLSModel2, OLSModel3, type="text")
 head(data)
 tail(data)
 
-#Convert remaining data types
-data$personal_status <- as.integer(factor(data$personal_status, levels = c("'female div/dep/mar'","'male div/sep'","'male mar/wid'","	
-'male single'")))
-data$other_parties <- as.integer(factor(data$other_parties, levels = c("none","guarantor","co applicant")))
-data$other_payment_plans <- as.integer(factor(data$other_payment_plans, levels = c("none","bank","stores")))
-data$job <- as.integer(factor(data$job, levels = c("skilled","‘unskilled resident’","‘high qualif/self emp/mgmt’","‘unemp/unskilled non res'")))
-data$foreign_worker <- as.integer(factor(data$foreign_worker, levels = c("yes","no")))
-data$employment <- as.integer(factor(data$employment, levels = c("'<1'","'>=7'","'1<=X<4'","unemployed")))
-
 #Subset data
 dataq3 <- data[,c("purpose","other_parties","installment_commitment","property_magnitude", "existing_credits", "num_dependents", "personal_status", "employment", "residence_since", "age", "housing", "job", "own_telephone", "foreign_worker", "other_payment_plans")]
 dataframeq3 <- data.frame(dataq3)
@@ -274,7 +265,7 @@ mean(accuracy1)
 mean(AUC1)
 
 #prob(BAD) = y = f(age + a.....)
- # the function in experiment one is estimated via logistic regression
+# the function in experiment one is estimated via logistic regression
 # the function in experiment three is estimated via CART
 
 
@@ -327,7 +318,7 @@ for (p in c(0.6, 0.65, 0.7, 0.75,0.77, 0.8, 0.83, 0.85, 0.9, 0.91, 0.93, 0.95)) 
   
   auc3 = c(auc3, ModelMetrics::auc(actual = df_test$BAD, predicted = predictions_CART[,2]))
   
-  }  
+}  
 
 p_auc_acc$auc_cart = auc3
 
