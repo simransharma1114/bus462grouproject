@@ -130,19 +130,6 @@ stargazer(OLSModel1, OLSModel2, OLSModel3, type="text")
 
 # libraries
 require(data.table)
-require(pastecs)
-require(stargazer)
-credit
-
-colnames(credit)
-
-##Checking for missing values
-colSums(is.na(credit)) # check if any columns have missing data
-data <- na.omit(credit) #omits rows with NAs
-
-data
-
-require(data.table)
 install.packages('dplyr')
 install.packages('fastDummies')
 install.packages('caret')
