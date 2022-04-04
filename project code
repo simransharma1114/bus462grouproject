@@ -136,14 +136,6 @@ credit
 
 colnames(credit)
 
-##See the data
-head(credit)
-tail(credit)
-view(credit)
-
-##Check the structure of the data - are all columns properly coded (numeric, categorical,...)
-str(credit)
-
 ##Checking for missing values
 colSums(is.na(credit)) # check if any columns have missing data
 data <- na.omit(credit) #omits rows with NAs
@@ -317,8 +309,6 @@ for (p in c(0.6, 0.65, 0.7, 0.75,0.77, 0.8, 0.83, 0.85, 0.9, 0.91, 0.93, 0.95)) 
 p_auc_acc$auc_cart = auc3
 
 ggplot() + geom_smooth(data = p_auc_acc, mapping = aes(x=p, y = auc, col = 'auc_logit')) + geom_smooth(data = p_auc_acc, mapping = aes(x=p, y = auc_cart, col = 'auc_CART'))
-
-
 
 
 ## divide data set into train and test
