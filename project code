@@ -127,37 +127,6 @@ stargazer(OLSModel1, OLSModel2, OLSModel3, type="text")
 
 
 #Q3 - Given the loan/customer features, we want to predict the default on loans.
-head(data)
-tail(data)
-
-#Subset data
-dataq3 <- data[,c("purpose","other_parties","installment_commitment","property_magnitude", "existing_credits", "num_dependents", "personal_status", "employment", "residence_since", "age", "housing", "job", "own_telephone", "foreign_worker", "other_payment_plans")]
-dataframeq3 <- data.frame(dataq3)
-
-#Stats summary
-stat.desc(dataq3)
-stargazer(dataq3,type="text")
-
-#Correlation
-chart.Correlation(dataq3)
-
-#Shuffle data
-shuffle_index <- sample(1:nrow(dataq3))
-dataq3 <- dataq3[shuffle_index,]
-
-#Create test and train data
-#Top 80% for train and bottom 20% for test
-n_cut <- round(nrow(dataq3)*.8,0) # row at which to cut data
-dataq3_train <- dataq3[1:n_cut] # create training data subset
-dataq3_test <- dataq3[(n_cut+1):nrow(dataq3)] # create test data subset
-
-#Check dim
-dim(dataq3_train)
-dim(dataq3_test)
-
-#Test distribution
-#prop.table(table(dataq3_train$)) #Need to add dependent variable
-#prop.table(table(data_testq3$)) #Need to add dependent variable
 
 # libraries
 require(data.table)
