@@ -156,8 +156,8 @@ dim(dataq3_train)
 dim(dataq3_test)
 
 #Test distribution
-#prop.table(table(dataq3_train$))
-#prop.table(table(data_testq3$))
+#prop.table(table(dataq3_train$)) #Need to add dependent variable
+#prop.table(table(data_testq3$)) #Need to add dependent variable
 
 # libraries
 require(data.table)
