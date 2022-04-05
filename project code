@@ -110,7 +110,8 @@ cor(dataq2$credit_amount,dataq2$housing)
 # Create a variable that considers the interaction between purpose and duration
 purpose_duration <- (dataq2$purpose*dataq2$duration)
 
-#Create a variable that considers the interaction between own_telephone and duration
+# Own_telephone has a high co-efficient as well, but has a correlation with duration and credit amount, which justifies creating an interaction
+#Create a variable that considers the interaction between own_telephone and duration 
 telephone_duration <- (dataq2$own_telephone*dataq2$duration)
 
 #Now create an OLS model that considers BOTH these interactions to see which best explains credit amounts
