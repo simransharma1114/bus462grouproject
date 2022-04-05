@@ -295,6 +295,3 @@ p_auc_acc$auc_cart = auc3
 
 ggplot() + geom_smooth(data = p_auc_acc, mapping = aes(x=p, y = auc, col = 'auc_logit')) + geom_smooth(data = p_auc_acc, mapping = aes(x=p, y = auc_cart, col = 'auc_CART'))
 
-
-## divide data set into train and test
-## trained (both) models on train and tested them on test set (in terms of auc)
