@@ -132,6 +132,10 @@ stargazer(OLSModel1, OLSModel2, type="text")
   #Loan features (purpose, installment commitment, property magnitude, duration)
   #Customer features (employment, age, housing, job, foreign worker, age, credit history, credit amount)
 
+getwd()
+setwd("/Users/minahiloonwala/Downloads")
+data <- read.csv('credit_2022.csv', header =TRUE)
+
 ##Assigning bad credit and good credit
 data$BAD = ifelse(data$class=='bad', 1, 0)
 
