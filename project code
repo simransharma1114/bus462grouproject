@@ -38,7 +38,8 @@ data <- na.omit(data)
 #Change data type of variables to integers
 data$checking_status <- as.integer(factor(data$checking_status, levels = c("'<0'","'0<=X<200'","'>=200'","'no checking'")))
 data$credit_history <- as.integer(factor(data$credit_history, levels = c("'critical/other existing credit'", "'existing paid'",  "'delayed previously'", "'no credits/all paid'" ,"'all paid'" )))
-data$purpose <- as.integer(factor(data$purpose, levels = c("'domestic appliance'","radio/tv","furniture/equipment","repairs","'used car'","'new car'","education","business","retraining","other"))) #assuming the order goes from the cheapest purchase to the most expensive purchase.
+#assuming the order goes from the cheapest purchase to the most expensive purchase.
+data$purpose <- as.integer(factor(data$purpose, levels = c("'domestic appliance'","radio/tv","furniture/equipment","repairs","'used car'","'new car'","education","business","retraining","other")))
 data$savings_status<- as.integer(factor(data$savings_status, levels = c("'no known savings'", "'<100'","'500<=X<1000'","'>=1000'","'100<=X<500'")))
 data$employment <- as.integer(factor(data$employment, levels = c("unemployed","'<1'","'1<=X<4'","'4<=X<7'","'>=7'")))
 data$personal_status <- as.integer(factor(data$personal_status, levels = c("'male single'","'female div/dep/mar'","'male div/sep'","'male mar/wid'")))
