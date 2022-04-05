@@ -134,6 +134,7 @@ stargazer(OLSModel1, OLSModel2, type="text")
   #Loan features (purpose, installment commitment, property magnitude, duration)
   #Customer features (employment, age, housing, job, foreign worker, age, credit history, credit amount)
 
+##Re-loading the file 
 getwd()
 setwd("/Users/minahiloonwala/Downloads")
 data <- read.csv('credit_2022.csv', header =TRUE)
@@ -236,12 +237,6 @@ predictions
 
 mean(accuracy1)
 mean(AUC1)
-
-#prob(BAD) = y = f(age + a.....)
-# the function in experiment one is estimated via logistic regression
-# the function in experiment three is estimated via CART
-
-
 
 # experiment 2: checking how AUC and accuracy change with the size of training set
 
