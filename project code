@@ -1,6 +1,12 @@
 #BUS 462 Group Project - Codebase
-#Team E.Kappa
 #April 5, 2022
+#Team E.Kappa:
+  #Alexandra Michelle Widjanarka (301385083)
+  #Alicia Chow (301362722)
+  #Demitria Erin Adela (301384713)
+  #Janet Liani Chandra (301384754)
+  #Minahil Oonwala (201344932)
+  #Simran Sharma (301360244)
 
 
 #Academic integrity pledge: We pledge on our honor that we have neither received nor given unauthorized assistance on this deliverable.
@@ -17,8 +23,15 @@ require(pastecs)
 require(stargazer)
 require(PerformanceAnalytics)
 require(corrplot)
+library(caret)
+library(fastDummies)
+library(dplyr)
+library(ggplot2)
 
+# Input data from GitHub
 data <- fread("https://raw.githubusercontent.com/simransharma1114/bus462grouproject/main/credit%20data.csv")
+
+# Remove NAs from dataset
 colSums(is.na(data))
 data <- na.omit(data)
 
@@ -38,9 +51,12 @@ data$own_telephone<- as.integer(factor(data$own_telephone, levels = c("none","ye
 data$foreign_worker<- as.integer(factor(data$foreign_worker, levels = c("yes","no")))
 data$class<- as.integer(factor(data$class, levels = c("good","bad")))
 
-#Q1 - What variables should be focused on while evaluating credit amount?
 
-#To get the correlation chart of all variables.
+#Q1 - What variables should be focused on while evaluating credit amount?
+#Dependent Variable: Credit Amount
+#Independent Variables: All variables from dataset
+
+#To get the correlation chart of ALL variables.
 chart.Correlation(data, histogram=TRUE, pch=19)
 
 # OLS model 
@@ -59,6 +75,8 @@ stargazer(m.OLS,model.step.OLS,type="text")
 summary(model.step.OLS)
 AIC(model.step.OLS)
 
+
+
 #Q2 - How does the scale of purchases affect one’s credit amount? That is, are individuals more likely to pay off their credit or less likely when purchasing larger items (which may take longer to pay off)?
 #Dependent Variable: Credit Amount
 #Independent Variables: Purpose, Credit History, Duration, Property Magnitude, Housing, Telephone (assuming it is similar to a mobile device and will be quite expensive)
@@ -66,20 +84,13 @@ AIC(model.step.OLS)
 # Begin by subsetting our data with only the relevant variables (dependent and independent variables)
 dataq2<-subset(data,select=c(purpose, credit_history,duration,property_magnitude,housing,own_telephone,credit_amount))
 
-# Run a descriptive statistics on our new subset
-stat.desc(dataq2)
-
-#To get the correlation chart of all variables.
+#To get the correlation chart of all variables & correlogram
 chart.Correlation(dataq2, histogram=TRUE, pch=19)
-
-# We can also visualize the correlations utilizing a correlogram
 cor_data<-cor(dataq2)
 corrplot(cor_data, method="number", "upper")
 
-# To analyze the data and answer our question, run the OLS model with all independent variables mentioned above
+# To analyze the data and answer our question, run the OLS model with all independent variables mentioned above & look at the summary results
 OLSModel1 <- lm(credit_amount ~ purpose + credit_history + duration + property_magnitude + housing + own_telephone, data=dataq2)
-
-# Let's look at the summary results from the OLS regression model
 summary(OLSModel1)
 stargazer(OLSModel1,type="text")
 AIC(OLSModel1)
@@ -93,6 +104,8 @@ plot(dataq2$duration, dataq2$credit_amount, main="Duration vs. Credit Amount", x
 # For our question, we want to analyze how purchases impact an individual's credit amount, and whether duration plays a factor in this 
 # We should find the interactions between duration and purpose, and duration and owning a phone. 
 
+# Additionally, While housing has a high co-efficient, it has a low correlation with duration and credit amount, our independent variable
+cor(dataq2$credit_amount,dataq2$housing)
 
 # Create a variable that considers the interaction between purpose and duration
 purpose_duration <- (dataq2$purpose*dataq2$duration)
@@ -102,41 +115,22 @@ telephone_duration <- (dataq2$own_telephone*dataq2$duration)
 
 #Now create an OLS model that considers BOTH these interactions to see which best explains credit amounts
 OLSModel2 <- lm(credit_amount ~ property_magnitude + housing + purpose_duration + telephone_duration, data=dataq2)
-OLSModel2
-
 summary(OLSModel2)
 stargazer(OLSModel2, type="text")
 AIC(OLSModel2)
 
+# Run stargazer to compare the 2 models
 stargazer(OLSModel1, OLSModel2, type="text")
 
-
-# While housing has a high co-efficient and has a low correlation with duration and credit amount, our independent variable
-cor(dataq2$credit_history,dataq2$duration)
-cor(dataq2$credit_amount,dataq2$housing)
-
-# Hypothetically, if we ran an OLS regression using housing
-housing_duration<-(dataq2$housing*dataq2$duration)
-OLSModel3 <- lm(credit_amount ~ property_magnitude + housing_duration + purpose + own_telephone + credit_history, data=dataq2)
-OLSModel3
-summary(OLSModel3)
-stargazer(OLSModel3, type="text")
-
-# The adjusted r-squared value is ~0.3 which is fairly low compared to the other models. 
-stargazer(OLSModel1, OLSModel2, OLSModel3, type="text")
+# Based on the results, OLSModel2 is the better fitted model due to its lower adjusted r-squared. 
+# Duration is also the best indicator of credit amount, whereas purchases do impact credit, but not a lot as we thought initially.
 
 
 #Q3 - Given the loan/customer features, we want to predict the default on loans.
-
-# libraries
-require(data.table)
-install.packages('dplyr')
-install.packages('fastDummies')
-install.packages('caret')
-library(caret)
-library(fastDummies)
-library(dplyr)
-library(ggplot2)
+#Dependent Variable: Credit Amount
+#Independent Variables: 
+  #Loan features (purpose, installment commitment, property magnitude, duration)
+  #Customer features (employment, age, housing, job, foreign worker, age, credit history, credit amount)
 
 ##Assigning bad credit and good credit
 data$BAD = ifelse(data$class=='bad', 1, 0)
