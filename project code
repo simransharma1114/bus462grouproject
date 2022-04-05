@@ -18,7 +18,7 @@ require(stargazer)
 require(PerformanceAnalytics)
 require(corrplot)
 
-data <- fread("/Users/aliciachow/Documents/4th Year/BUS 462/Datasets/credit_data.csv")
+data <- fread("https://raw.githubusercontent.com/simransharma1114/bus462grouproject/main/credit%20data.csv")
 colSums(is.na(data))
 data <- na.omit(data)
 
